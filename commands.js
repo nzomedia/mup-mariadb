@@ -1,21 +1,23 @@
-import * as commandHandlers from './command-handlers';
+const commandHandlers = require('./command-handlers');
 
-export let setup = {
-  description: 'Installs and starts MariaDB',
-  handler: commandHandlers.setup
-};
+module.exports = {
+  setup: {
+    description: 'Installs and starts MariaDB',
+    handler: commandHandlers.setup
+  },
 
-export let logs = {
-  description: 'View MariaDB logs',
-  handler: commandHandlers.logs
-};
+  logs: {
+    description: 'View MariaDB logs',
+    handler: commandHandlers.logs
+  },
 
-export let start = {
-  description: 'Start MariaDB',
-  handler: commandHandlers.start
-};
+  start: {
+    description: 'Start MariaDB',
+    handler: commandHandlers.start
+  },
 
-export let stop = {
-  description: 'Stop MariaDB',
-  handler: commandHandlers.stop
-};
+  stop: {
+    description: 'Stop MariaDB',
+    handler: commandHandlers.stop
+  }
+}
