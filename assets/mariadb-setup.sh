@@ -2,6 +2,7 @@
 
 sudo mkdir -p /opt/mariadb/data
 sudo mkdir -p /opt/mariadb/config
+sudo mkdir -p /opt/mariadb/initdb
 sudo chown ${USER} /opt/mariadb -R
 
 #nécessaire pour les cas où l'hote utilise seLinux

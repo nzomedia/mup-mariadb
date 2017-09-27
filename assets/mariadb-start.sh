@@ -24,9 +24,10 @@ sudo docker run \
   --publish=127.0.0.1:3306:<%= mariadbPort %> \
   --volume=/opt/mariadb/data:<%= mariadbDir %> \
   --volume=/opt/mariadb/config:<%= mariadbConfigDir %> \
+  --volume=/opt/mariadb/initdb:/docker-entrypoint-initdb.d \
   -e MYSQL_ROOT_PASSWORD=<%= mariadbRootPassord %> \
   -e MYSQL_DATABASE=<%= mariadbDbName %> \
   -e MYSQL_USER=<%= mariadbUserName %> \
-  -e MYSQL_PASSWORD=<%= mariadbUserPassword %>
+  -e MYSQL_PASSWORD=<%= mariadbUserPassword %> \
   --name=mariadb \
   mariadb:$MARIADB_VERSION

@@ -34,10 +34,17 @@ module.exports = {
       script: api.resolvePath(__dirname, 'assets/mariadb-setup.sh')
     });
 
-    //TODO externaliser la config, puis la monter
+    //To copy our custom configuration file in the remote mount point
+    //so that the mariadb container can load it: 
     list.copy('Copying mariadb.conf', {
       src: api.resolvePath(__dirname, 'assets/mariadb.conf'),
       dest: '/opt/mariadb/config/my.cnf'
+    });
+
+   //we copy our initial sql commands file, to remote mount point
+   list.copy('Copying mariadb database initialisation file', {
+      src: api.resolvePath(__dirname, 'assets/initdb.sql'),
+      dest: '/opt/mariadb/initdb'
     });
 
     const sessions = api.getSessions(['mariadb']);
