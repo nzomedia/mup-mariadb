@@ -29,4 +29,4 @@ sudo docker run \
   -e MYSQL_USER=<%= mariadbUserName %> \
   -e MYSQL_PASSWORD=<%= mariadbUserPassword %>
   --name=mariadb \
-  mariadb:$MARIADB_VERSION mariadb
+  mariadb:$MARIADB_VERSION
