@@ -67,12 +67,13 @@ module.exports = {
       script: api.resolvePath(__dirname, 'assets/mariadb-start.sh'),
       vars: {
         mariadbVersion: config.version || '15.1',
-        mariaDbDir: '/var/lib/mysql',
+        mariadbDir: '/var/lib/mysql',
         mariadbConfigDir: '/etc/mysql/conf.d',
         mariadbRootPassord: 'passer',
         mariadbDbName: config.databaseName,
         mariadbUserName: config.databaseUser,
-        mariadbUserPassword: config .userPassword
+        mariadbUserPassword: config.userPassword,
+	mariadbPort: config.port
 
       }
     });
