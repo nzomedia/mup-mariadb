@@ -5,7 +5,7 @@ module.exports = {
   name: "mariadb",
   description: 'Commands to manage MariaDB',
   commands: _commands,
-  validate: function(){
+  validate: {
     mariadb: _validator
   },
 
