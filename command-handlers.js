@@ -44,7 +44,7 @@ module.exports = {
    //we copy our initial sql commands file, to remote mount point
    list.copy('Copying mariadb database initialisation file', {
       src: api.resolvePath(__dirname, 'assets/initdb.sql'),
-      dest: '/opt/mariadb/initdb'
+      dest: '/opt/mariadb/initdb/initdb.sql'
     });
 
     const sessions = api.getSessions(['mariadb']);
