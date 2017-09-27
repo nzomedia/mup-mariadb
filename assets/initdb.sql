@@ -1,3 +1,3 @@
 
-grant replication slave, replication client, select on *.* to 'server_local'@'%';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT, SELECT on *.* to 'server_local'@'%';
 flush privileges;
