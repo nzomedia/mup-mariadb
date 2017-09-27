@@ -14,5 +14,9 @@
     "sql"
   ],
   "author": "youssouf",
-  "license": "ISC"
+  "license": "ISC",
+"dependencies": {
+    "nodemiral": "~1.1.1",
+    "joi": "~10.6.0"
+	}
 }
