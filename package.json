@@ -11,12 +11,13 @@
     "mysql",
     "mup",
     "plugin",
-    "sql"
+    "sql",
+    "meteor-up"
   ],
   "author": "youssouf",
   "license": "ISC",
 "dependencies": {
     "nodemiral": "~1.1.1",
-    "joi": "~10.6.0",
+    "joi": "~10.6.0"
 	}
 }
