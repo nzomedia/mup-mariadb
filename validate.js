@@ -2,10 +2,12 @@ var joi = require('joi');
 
 var schema = joi.object().keys({
   version: joi.string(),
-  databaseName: joi.string(),
-  databaseUser: joi.string(),
-  port: joi.number(),
+  databaseName: joi.string().required(),
+  databaseUser: joi.string().required(),
+  port: joi.number().default(3306),
   userPassword: joi.string(),
+  sqlDumpFile: joi.string().default(""),
+  customConfig: joi.string().default(""),
   servers: joi.object().keys().required()
 });
 

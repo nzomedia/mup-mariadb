@@ -27,6 +27,7 @@ module.exports = {
 
     const mariadbSessions = api.getSessions(['mariadb']);
     const meteorSessions = api.getSessions(['app']);
+    const config = api.getConfig().mariadb;
 
     const list = nodemiral.taskList('Setup Mariadb');
 
@@ -34,18 +35,33 @@ module.exports = {
       script: api.resolvePath(__dirname, 'assets/mariadb-setup.sh')
     });
 
-    //To copy our custom configuration file in the remote mount point
-    //so that the mariadb container can load it: 
-    list.copy('Copying mariadb.conf', {
-      src: api.resolvePath(__dirname, 'assets/mariadb.conf'),
-      dest: '/opt/mariadb/config/my.cnf'
-    });
+    const fs = require('fs');
 
-   //we copy our initial sql commands file, to remote mount point
-   list.copy('Copying mariadb database initialisation file', {
-      src: api.resolvePath(__dirname, 'assets/initdb.sql'),
-      dest: '/opt/mariadb/initdb/initdb.sql'
-    });
+    if(config.customConfig && config.customConfig.length){
+      let mariadbConfigFile = api.resolvePath(api.getBasePath(), config.customConfig); 
+      if(!fs.existsSync(mariadbConfigFile))
+        log("File not found:", config.configFile);
+      else {
+        //To copy our custom configuration file in the remote mount point
+        //so that the mariadb container can load it: 
+        list.copy('Copying custom mariadb cnf file', {
+          src: mariadbConfigFile,
+          dest: '/opt/mariadb/config/my.cnf'
+        });
+      }
+    }
+    if(config.sqlDumpFile && config.sqlDumpFile.length){
+      let customSqlDumpFile = api.resolvePath(api.getBasePath(), config.sqlDumpFile);
+      if(!fs.existsSync(customSqlDumpFile))
+        log("File not found:", config.sqlDumpFile);
+      else {
+        //we copy our initial sql commands file, to remote mount point
+        list.copy('Copying mariadb database sql dump file', {
+            src: customSqlDumpFile,
+            dest: '/opt/mariadb/initdb/initdb.sql'
+          });
+      }
+    }
 
     const sessions = api.getSessions(['mariadb']);
 
