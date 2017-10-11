@@ -113,5 +113,62 @@ module.exports = {
 
     const sessions = api.getSessions(['mariadb']);
     return api.runTaskList(list, sessions, { verbose: api.verbose });
+  },
+
+  /**
+   * Backup database data
+   */
+  backup: function(api){
+    log("exec => mup mariadb backup");
+    const session = api.getSessions(["mariadb"]);
+    const list = nodemiral.taskList("Backup Mariadb data");
+    const config = api.getConfig().mariadb;
+    if( ! config.backup ){
+        return Promise.reject("Backup destination path required but missing in configuration file.");
+    }
+    const backupDestinationPath = config.backup.destinationPath;
+    list.executeScript("Backup db data",{
+      script: api.resolvePath(__dirname, "assets/backupData.sh"),
+        vars: {
+          destinationPath: backupDestinationPath,
+          user: config.databaseUser,
+          password: config.userPassword,
+          db: config.databaseName
+        }
+      });
+    return api.runTaskList(list, session, {verbose: api.verbose});
+  },
+
+  /**
+   * Restore data from a SQL dump file
+   */
+  restore: function(api){
+    log("exec => mup mariadb restore");
+    const session = api.getSessions(["mariadb"]);
+    const list = nodemiral.taskList("Restore Mariadb data");
+    const config = api.getConfig().mariadb;
+    if( ! config.restore ){
+        return Promise.reject("Restore configuration required but missing in configuration file.");
+    }
+    const localDumpFilePath = config.restore.sqlDumpFile;
+
+    const remoteDumpFilePath = "/opt/" + api.getConfig().app.name + "/tmp/" + require("path").basename(localDumpFilePath);
+console.log("src:", localDumpFilePath, "dest:", remoteDumpFilePath);
+
+    list.copy("Copying sql dump file", {
+      src: localDumpFilePath,
+      dest: remoteDumpFilePath
+    })
+
+    list.executeScript("Restore db data",{
+      script: api.resolvePath(__dirname, "assets/restoreData.sh"),
+        vars: {
+          dumpFilePath: remoteDumpFilePath,
+          user: config.databaseUser,
+          password: config.userPassword,
+          db: config.databaseName
+        }
+      });
+    return api.runTaskList(list, session, {verbose: api.verbose});
   }
 }

@@ -8,7 +8,13 @@ var schema = joi.object().keys({
   userPassword: joi.string(),
   sqlDumpFile: joi.string().default(""),
   customConfig: joi.string().default(""),
-  servers: joi.object().keys().required()
+  servers: joi.object().keys().required(),
+  backup: joi.object().keys({
+    destinationPath: joi.string().required()
+  }),
+  restore: joi.object().keys({
+    sqlDumpFile: joi.string().required()
+  }),
 });
 
 module.exports = function(config, utils) {

@@ -19,5 +19,14 @@ module.exports = {
   stop: {
     description: 'Stop MariaDB',
     handler: commandHandlers.stop
+  },
+  backup: {
+    description: "Make a backup of the database data",
+    handler: commandHandlers.backup
+  },
+  restore: {
+    description: "Restore data from a SQL dump file.",
+    handler: commandHandlers.restore
   }
+
 }
