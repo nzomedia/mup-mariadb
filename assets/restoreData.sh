@@ -12,7 +12,7 @@ then
     echo "$DUMP_FILE_PATH does not exists."
     exit 0
 else
-    cat $DUMP_FILE_PATH | docker exec -i mariadb /usr/bin/mysql -u $DB_USER --password=$DB_USER_PASSWORD $DB
+    cat $DUMP_FILE_PATH | docker exec -i mariadb /usr/bin/mysql -u $DB_USER --password=$DB_USER_PASSWORD
     echo "Data restoration finished." 
     echo "Deleting sql dump file:"
     rm -- $DUMP_FILE_PATH
