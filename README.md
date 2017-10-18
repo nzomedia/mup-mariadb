@@ -76,10 +76,80 @@ The **databaseName**, **databaseUser** are required.
     mup deploy //to build, prepare, push to remote server and run your app, you already know :)
 ```
 
+## Backup and restore database Data:
+Presently, the plugin provides a mean to make logical backups and restores of the database using _mysqldump_ command internally.
+
+### Backup procedure:
+1. Add `mariadb.backup` property to _mup.js_. It should have a key named `destinationPath` that indicates where to store sql dump file. The path should be already present on the host file system and read-writable.
+
+    Exemple:
+    ```
+    File mup.js:
+    mariadb: {
+        databaseName: "my-database",
+        port: 3306, 
+        databaseUser: "my-database-user",
+        userPassword: "my-database-user-password",
+        servers: {
+            one: {}
+        },
+        backup: {
+            destinationPath: "/folder/inside/host/machine/"
+        }
+    }
+
+    ```
+    _Database information (name, user, password,...) is required._
+
+2. On the CLI run the command:
+```
+mup mariadb backup
+```
+
+**What happens next ?**<br>
+The sql dump will be saved in the specified path and the name will be <database-name>_YYYY-MM-dd_HH-mm-ss.sql_.
+With _MM_ specifying the month number on two digits.<br>
+Exemple: `my-database_2017-10-11_19-10-20.sql`
+
+Remember the dump file is actually stored on the host. In the future, if necessary, i'll implement a way to compress, and download it.
+
+
+### Restore procedure:
+
+To restore database data:
+1. Add `mariadb.restore` property to _mup.js_ file. It should have a property named `sqlDumpFile` that indicates the sql dump file containing SQL commands (DDL, LMD, ...) to execute.
+
+    Exemple:
+
+    ```
+    File mup.js:
+    mariadb: {
+        databaseName: "my-database",
+        port: 3306, 
+        databaseUser: "my-database-user",
+        userPassword: "my-database-user-password",
+        servers: {
+            one: {}
+        },
+        restore: {
+            sqlDumpFile: "/path/to/sql_dump_file.sql"
+        }
+    }
+    ```
+    _Database information (name, user, password,...) is required._
+
+2. On the CLI run the command:
+    ```
+    mup mariadb restore
+    ```
+**What happens next ?**<br>
+The SQL dump file will be copied in the host at `/opt/<app-name>/tmp` then we use _mysqldump_ to execute its commands. At last, we delete it from the host.
+
+
 ## What remains ?
-1. Write tests
+1. Write tests (how ???)
 2. Pass tests
 3. Find a better way to manage root password.
 3. Reduce the size of the container, it's actually using debian:jessy base image. And in my setup it uses ~400MB on disk once installed.
 
-# Please don't use this for anything else thant testing, as it is untested or may have configuration issues. I'll update the readme in case of change. If you want to help, please contact me :) .
+## This project is under development, it doesn't have tests yet, it may contain errors. I'll update the readme in case of change. If you want to help, please contact me :).
